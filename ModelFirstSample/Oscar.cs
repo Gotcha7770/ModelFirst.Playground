@@ -16,7 +16,8 @@ namespace ModelFirstSample
     {
         public int Id { get; set; }
         public string Nomination { get; set; }
-        public int ActorId { get; set; }
-        public int DirectorId { get; set; }
+    
+        public virtual ActorToOscar ActorToOscar { get; set; }
+        public virtual DirectorToOscar DirectorToOscar { get; set; }
     }
 }

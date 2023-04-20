@@ -10,6 +10,7 @@ namespace ModelFirstSample
     {
         static void Main(string[] args)
         {
+            var context = new Model1Container1();
         }
     }
 }

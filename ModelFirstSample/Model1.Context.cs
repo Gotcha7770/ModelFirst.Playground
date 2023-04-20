@@ -28,5 +28,7 @@ namespace ModelFirstSample
         public DbSet<Actor> Artists { get; set; }
         public DbSet<Oscar> Oscars { get; set; }
         public DbSet<Director> Directors { get; set; }
+        public DbSet<ActorToOscar> ActorToOscarSet { get; set; }
+        public DbSet<DirectorToOscar> DirectorToOscarSet { get; set; }
     }
 }

@@ -12,16 +12,11 @@ namespace ModelFirstSample
     using System;
     using System.Collections.Generic;
     
-    public partial class Actor
+    public partial class ActorToOscar
     {
-        public Actor()
-        {
-            this.ActorToOscar = new HashSet<ActorToOscar>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
+        public int ActorId { get; set; }
     
-        public virtual ICollection<ActorToOscar> ActorToOscar { get; set; }
+        public virtual Oscar Oscar { get; set; }
     }
 }

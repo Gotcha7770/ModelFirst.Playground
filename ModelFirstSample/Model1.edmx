@@ -9,12 +9,22 @@
     <EntitySet Name="Artists" EntityType="Model1.Store.Artists" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Oscars" EntityType="Model1.Store.Oscars" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="Directors" EntityType="Model1.Store.Directors" store:Type="Tables" Schema="dbo" />
-    <AssociationSet Name="ArtistOscar" Association="Model1.Store.ArtistOscar">
-      <End Role="Artist" EntitySet="Artists" />
+    <EntitySet Name="ActorToOscarSet" EntityType="Model1.Store.ActorToOscarSet" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="DirectorToOscarSet" EntityType="Model1.Store.DirectorToOscarSet" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="ActorActorToOscar" Association="Model1.Store.ActorActorToOscar">
+      <End Role="Actor" EntitySet="Artists" />
+      <End Role="ActorToOscar" EntitySet="ActorToOscarSet" />
+    </AssociationSet>
+    <AssociationSet Name="DirectorDirectoToOscar" Association="Model1.Store.DirectorDirectoToOscar">
+      <End Role="Director" EntitySet="Directors" />
+      <End Role="DirectoToOscar" EntitySet="DirectorToOscarSet" />
+    </AssociationSet>
+    <AssociationSet Name="ActorToOscarOscar" Association="Model1.Store.ActorToOscarOscar">
+      <End Role="ActorToOscar" EntitySet="ActorToOscarSet" />
       <End Role="Oscar" EntitySet="Oscars" />
     </AssociationSet>
-    <AssociationSet Name="DirectorOscar" Association="Model1.Store.DirectorOscar">
-      <End Role="Director" EntitySet="Directors" />
+    <AssociationSet Name="DirectorToOscarOscar" Association="Model1.Store.DirectorToOscarOscar">
+      <End Role="DirectorToOscar" EntitySet="DirectorToOscarSet" />
       <End Role="Oscar" EntitySet="Oscars" />
     </AssociationSet>
   </EntityContainer>
@@ -31,8 +41,6 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Nomination" Type="nvarchar(max)" Nullable="false" />
-    <Property Name="ArtistId" Type="int" Nullable="false" />
-    <Property Name="DirectorId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="Directors">
     <Key>
@@ -41,27 +49,67 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
   </EntityType>
-  <Association Name="ArtistOscar">
-    <End Role="Artist" Type="Model1.Store.Artists" Multiplicity="1" />
-    <End Role="Oscar" Type="Model1.Store.Oscars" Multiplicity="*" />
+  <EntityType Name="ActorToOscarSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ActorId" Type="int" Nullable="false" />
+    <Property Name="Oscar_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="DirectorToOscarSet">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DirectorId" Type="int" Nullable="false" />
+    <Property Name="Oscar_Id" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="ActorActorToOscar">
+    <End Role="Actor" Type="Model1.Store.Artists" Multiplicity="1" />
+    <End Role="ActorToOscar" Type="Model1.Store.ActorToOscarSet" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="Artist">
+      <Principal Role="Actor">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Oscar">
-        <PropertyRef Name="ArtistId" />
+      <Dependent Role="ActorToOscar">
+        <PropertyRef Name="ActorId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="DirectorOscar">
+  <Association Name="DirectorDirectoToOscar">
     <End Role="Director" Type="Model1.Store.Directors" Multiplicity="1" />
-    <End Role="Oscar" Type="Model1.Store.Oscars" Multiplicity="*" />
+    <End Role="DirectoToOscar" Type="Model1.Store.DirectorToOscarSet" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Director">
         <PropertyRef Name="Id" />
       </Principal>
-      <Dependent Role="Oscar">
+      <Dependent Role="DirectoToOscar">
         <PropertyRef Name="DirectorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="ActorToOscarOscar">
+    <End Role="ActorToOscar" Type="Model1.Store.ActorToOscarSet" Multiplicity="*" />
+    <End Role="Oscar" Type="Model1.Store.Oscars" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Oscar">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="ActorToOscar">
+        <PropertyRef Name="Oscar_Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="DirectorToOscarOscar">
+    <End Role="DirectorToOscar" Type="Model1.Store.DirectorToOscarSet" Multiplicity="*" />
+    <End Role="Oscar" Type="Model1.Store.Oscars" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Oscar">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="DirectorToOscar">
+        <PropertyRef Name="Oscar_Id" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -73,12 +121,22 @@
           <EntitySet Name="Artists" EntityType="Model1.Actor" />
           <EntitySet Name="Oscars" EntityType="Model1.Oscar" />
           <EntitySet Name="Directors" EntityType="Model1.Director" />
-          <AssociationSet Name="ArtistOscar" Association="Model1.ArtistOscar">
-            <End Role="Artist" EntitySet="Artists" />
+          <EntitySet Name="ActorToOscarSet" EntityType="Model1.ActorToOscar" />
+          <AssociationSet Name="ActorActorToOscar" Association="Model1.ActorActorToOscar">
+            <End Role="Actor" EntitySet="Artists" />
+            <End Role="ActorToOscar" EntitySet="ActorToOscarSet" />
+          </AssociationSet>
+          <EntitySet Name="DirectorToOscarSet" EntityType="Model1.DirectorToOscar" />
+          <AssociationSet Name="DirectorDirectoToOscar" Association="Model1.DirectorDirectoToOscar">
+            <End Role="Director" EntitySet="Directors" />
+            <End Role="DirectoToOscar" EntitySet="DirectorToOscarSet" />
+          </AssociationSet>
+          <AssociationSet Name="ActorToOscarOscar" Association="Model1.ActorToOscarOscar">
+            <End Role="ActorToOscar" EntitySet="ActorToOscarSet" />
             <End Role="Oscar" EntitySet="Oscars" />
           </AssociationSet>
-          <AssociationSet Name="DirectorOscar" Association="Model1.DirectorOscar">
-            <End Role="Director" EntitySet="Directors" />
+          <AssociationSet Name="DirectorToOscarOscar" Association="Model1.DirectorToOscarOscar">
+            <End Role="DirectorToOscar" EntitySet="DirectorToOscarSet" />
             <End Role="Oscar" EntitySet="Oscars" />
           </AssociationSet>
         </EntityContainer>
@@ -88,7 +146,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" />
-          <NavigationProperty Name="Oscar" Relationship="Model1.ArtistOscar" FromRole="Artist" ToRole="Oscar" />
+          <NavigationProperty Name="ActorToOscar" Relationship="Model1.ActorActorToOscar" FromRole="Actor" ToRole="ActorToOscar" />
         </EntityType>
         <EntityType Name="Oscar">
           <Key>
@@ -96,8 +154,8 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nomination" Type="String" Nullable="false" />
-          <Property Name="ActorId" Type="Int32" Nullable="false" />
-          <Property Name="DirectorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ActorToOscar" Relationship="Model1.ActorToOscarOscar" FromRole="Oscar" ToRole="ActorToOscar" />
+          <NavigationProperty Name="DirectorToOscar" Relationship="Model1.DirectorToOscarOscar" FromRole="Oscar" ToRole="DirectorToOscar" />
         </EntityType>
         <EntityType Name="Director">
           <Key>
@@ -105,31 +163,55 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" Nullable="false" />
-          <NavigationProperty Name="Oscar" Relationship="Model1.DirectorOscar" FromRole="Director" ToRole="Oscar" />
+          <NavigationProperty Name="DirectorToOscar" Relationship="Model1.DirectorDirectoToOscar" FromRole="Director" ToRole="DirectoToOscar" />
         </EntityType>
-        <Association Name="ArtistOscar">
-          <End Type="Model1.Actor" Role="Artist" Multiplicity="1" />
-          <End Type="Model1.Oscar" Role="Oscar" Multiplicity="*" />
+        <EntityType Name="ActorToOscar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ActorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Oscar" Relationship="Model1.ActorToOscarOscar" FromRole="ActorToOscar" ToRole="Oscar" />
+        </EntityType>
+        <Association Name="ActorActorToOscar">
+          <End Type="Model1.Actor" Role="Actor" Multiplicity="1" />
+          <End Type="Model1.ActorToOscar" Role="ActorToOscar" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Artist">
+            <Principal Role="Actor">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Oscar">
+            <Dependent Role="ActorToOscar">
               <PropertyRef Name="ActorId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="DirectorOscar">
+        <EntityType Name="DirectorToOscar">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DirectorId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Oscar" Relationship="Model1.DirectorToOscarOscar" FromRole="DirectorToOscar" ToRole="Oscar" />
+        </EntityType>
+        <Association Name="DirectorDirectoToOscar">
           <End Type="Model1.Director" Role="Director" Multiplicity="1" />
-          <End Type="Model1.Oscar" Role="Oscar" Multiplicity="*" />
+          <End Type="Model1.DirectorToOscar" Role="DirectoToOscar" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Director">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Oscar">
+            <Dependent Role="DirectoToOscar">
               <PropertyRef Name="DirectorId" />
             </Dependent>
           </ReferentialConstraint>
+        </Association>
+        <Association Name="ActorToOscarOscar">
+          <End Type="Model1.ActorToOscar" Role="ActorToOscar" Multiplicity="1" />
+          <End Type="Model1.Oscar" Role="Oscar" Multiplicity="1" />
+        </Association>
+        <Association Name="DirectorToOscarOscar">
+          <End Type="Model1.DirectorToOscar" Role="DirectorToOscar" Multiplicity="1" />
+          <End Type="Model1.Oscar" Role="Oscar" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>
@@ -150,8 +232,6 @@
         <MappingFragment StoreEntitySet="Oscars">
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Nomination" ColumnName="Nomination" />
-          <ScalarProperty Name="ActorId" ColumnName="ArtistId" />
-          <ScalarProperty Name="DirectorId" ColumnName="DirectorId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -163,6 +243,38 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="ActorToOscarSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.ActorToOscar)">
+        <MappingFragment StoreEntitySet="ActorToOscarSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="ActorId" ColumnName="ActorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DirectorToOscarSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Model1.DirectorToOscar)">
+        <MappingFragment StoreEntitySet="DirectorToOscarSet">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="DirectorId" ColumnName="DirectorId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="ActorToOscarOscar" TypeName="Model1.ActorToOscarOscar" StoreEntitySet="ActorToOscarSet">
+      <EndProperty Name="Oscar">
+        <ScalarProperty Name="Id" ColumnName="Oscar_Id" />
+      </EndProperty>
+      <EndProperty Name="ActorToOscar">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="DirectorToOscarOscar" TypeName="Model1.DirectorToOscarOscar" StoreEntitySet="DirectorToOscarSet">
+      <EndProperty Name="Oscar">
+        <ScalarProperty Name="Id" ColumnName="Oscar_Id" />
+      </EndProperty>
+      <EndProperty Name="DirectorToOscar">
+        <ScalarProperty Name="Id" ColumnName="Id" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping></edmx:Mappings>
   </edmx:Runtime>

@@ -16,12 +16,12 @@ namespace ModelFirstSample
     {
         public Director()
         {
-            this.Oscar = new HashSet<Oscar>();
+            this.DirectorToOscar = new HashSet<DirectorToOscar>();
         }
     
         public int Id { get; set; }
         public string Name { get; set; }
     
-        public virtual ICollection<Oscar> Oscar { get; set; }
+        public virtual ICollection<DirectorToOscar> DirectorToOscar { get; set; }
     }
 }

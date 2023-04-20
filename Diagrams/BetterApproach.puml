@@ -1,0 +1,34 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+class Person {
+  *id : number
+  --
+  *name : text
+}
+
+class Actor extends Person {
+  *agentPhone : text
+}
+
+class Director extends Person {
+ 
+  *company : text
+}
+
+entity "Person" as e01 {
+ *id : number <<generated>>
+  --
+  *discriminator : text
+}
+
+entity "Oscar" as e02 {
+  *id : number <<generated>>
+  --
+  *personId : number
+  *nomination : text
+}
+
+e01 |o..o{ e02
+
+@enduml

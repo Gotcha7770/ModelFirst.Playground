@@ -5,12 +5,14 @@ entity "Actor" as e01 {
   *id : number <<generated>>
   --
   *name : text
+  *agentPhone : text
 }
 
 entity "Director" as e02 {
   *id : number <<generated>>
   --
   *name : text
+  *company : text
 }
 
 entity "Oscar" as e03 {
